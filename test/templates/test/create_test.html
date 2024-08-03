@@ -1,0 +1,159 @@
+{% extends 'test/base.html' %}
+
+{% block title %}Create a Test{% endblock %}
+
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        text-align: left;
+        margin: 2vw 0;
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .btn {
+        margin-top: 2vw;
+    }
+
+    .answer {
+        display: flex;
+        align-items: center;
+        margin: 1vw 0;
+    }
+
+    input[type="text"],
+    .form-check-input {
+        width: 100%;
+        padding: 1vw;
+        border: 0.1vw solid #ccc;
+        border-radius: 0.5vw;
+        margin-top: 1vw;
+    }
+
+    .form-check-label {
+        margin-left: 1vw;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 5vw;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-group {
+            padding: 2vw 0;
+        }
+
+        input[type="text"],
+        .form-check-input {
+            padding: 1.5vw;
+        }
+
+        .btn {
+            margin-top: 1vw;
+        }
+
+        .answer {
+            margin: 0.5vw 0;
+        }
+
+        .form-check-label {
+            margin-left: 0.5vw;
+        }
+    }
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Create a Test</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ test_form.as_p }}
+        </div>
+        <div id="questions">
+        </div>
+        <button type="button" class="btn btn-secondary mt-3 add-question">Add a Question</button>
+        <button type="submit" class="btn btn-primary mt-3">Create a Test</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const maxQuestions = 50;
+        const maxAnswers = 6;
+
+        function addAnswer(questionDiv) {
+            const questionIndex = questionDiv.data('index');
+            const answerCount = questionDiv.find('.answer').length;
+            if (answerCount < maxAnswers) {
+                const answerIndex = answerCount + 1;
+                const newAnswer = `
+                    <div class="form-group answer">
+                        <input type="text" name="question_${questionIndex}_answer_${answerIndex}_name" class="form-control" placeholder="Reply text">
+                        <input type="checkbox" name="question_${questionIndex}_answer_${answerIndex}_is_correct" class="form-check-input">
+                        <label class="form-check-label"></label>
+                    </div>`;
+                questionDiv.find('.answers').append(newAnswer);
+            } else {
+                alert('You can add up to 6 responses');
+            }
+        }
+
+        function addQuestion() {
+            const questionCount = $('#questions .question').length;
+            if (questionCount < maxQuestions) {
+                const questionIndex = questionCount + 1;
+                const newQuestion = `
+                    <div class="question form-group" data-index="${questionIndex}">
+                        <input type="text" name="question_${questionIndex}_name" class="form-control" placeholder="Question text">
+                        <h3>Answers</h3>
+                        <div class="answers">
+                            <div class="form-group answer">
+                                <input type="text" name="question_${questionIndex}_answer_1_name" class="form-control" placeholder="Reply text">
+                                <input type="checkbox" name="question_${questionIndex}_answer_1_is_correct" class="form-check-input">
+                                <label class="form-check-label"></label>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary add-answer">Add an answer</button>
+                    </div>`;
+                $('#questions').append(newQuestion);
+            } else {
+                alert('You can add up to 50 responses.');
+            }
+        }
+
+        $(document).on('click', '.add-answer', function () {
+            const questionDiv = $(this).closest('.question');
+            addAnswer(questionDiv);
+        });
+        $('.add-question').click(function () {
+            addQuestion();
+        });
+    });
+</script>
+{% endblock %}
+

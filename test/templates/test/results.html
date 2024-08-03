@@ -1,0 +1,28 @@
+{% extends 'test/base.html' %}
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <h5 class="text-200 fs--1">User Results {{ request.user.username }}</h5>
+    <h5 class="text-400">{{ test }}</h5>
+    <h5 class="text-400">Correct answers</h5>
+    <h5 class="text-400">{{ correct_answers_by_user }} out of {{ total_questions }}</h5>
+    <h5 class="text-400">Percentage of correct answers: {{ percentage_correct }}%</h5>
+{% endblock %}

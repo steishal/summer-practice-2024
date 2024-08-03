@@ -1,0 +1,134 @@
+{% extends 'test/base.html' %}
+{% load static %}
+{% block title %}Edit Test{% endblock %}
+
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Edit Test</h2>
+    <form id="editTestForm" method="POST">
+        {% csrf_token %}
+        {{ test_form.as_p }}
+
+        <!-- Existing Questions and Answers -->
+        {% for question in test.question_set.all %}
+            <div class="question-block">
+                <div class="form-group">
+                    <label for="question_{{ question.id }}_name">Question {{ forloop.counter }}</label>
+                    <input type="text" id="question_{{ question.id }}_name" class="form-control" name="question_{{ question.id }}_name" value="{{ question.name }}">
+                    <button type="button" class="btn btn-danger mt-2 delete-question" data-question-id="{{ question.id }}">Delete Question</button>
+                </div>
+                <div class="form-group">
+                    {% for answer in question.answer_set.all %}
+                        <div class="form-check">
+                            <input type="text" id="question_{{ question.id }}_answer_{{ answer.id }}_name" class="form-control" name="question_{{ question.id }}_answer_{{ answer.id }}_name" value="{{ answer.name }}">
+                            <input type="checkbox" id="question_{{ question.id }}_answer_{{ answer.id }}_is_correct" class="form-check-input" name="question_{{ question.id }}_answer_{{ answer.id }}_is_correct" {% if answer.correct %}checked{% endif %}>
+                            <label class="form-check-label" for="question_{{ question.id }}_answer_{{ answer.id }}_is_correct">Correct</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Container for New Questions and Answers -->
+        <div id="newQuestionsContainer"></div>
+
+        <input type="hidden" id="questionCount" name="questionCount" value="{{ test.question_set.count }}">
+
+        <button type="button" id="addQuestionButton" class="btn btn-primary mt-3">Add Question</button>
+        <input type="submit" value="Save Changes" class="btn btn-primary mt-3">
+        <button type="submit" name="delete_test" class="btn btn-danger mt-3">Delete Test</button>
+        <a href="{% url 'main_page' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<!-- JavaScript for dynamically adding questions and answers -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let questionCount = parseInt(document.getElementById('questionCount').value) + 1;
+    const addQuestionButton = document.getElementById('addQuestionButton');
+    const newQuestionsContainer = document.getElementById('newQuestionsContainer');
+
+    addQuestionButton.addEventListener('click', function () {
+        if (questionCount <= 50) {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question-block');
+            questionDiv.innerHTML = `
+                <div class="form-group">
+                    <label for="question_${questionCount}_name">Question ${questionCount}</label>
+                    <input type="text" id="question_${questionCount}_name" class="form-control" name="question_${questionCount}_name">
+                </div>
+                <div class="form-group">
+                    ${Array.from({ length: 6 }, (_, i) => `
+                        <div class="form-check">
+                            <input type="text" id="question_${questionCount}_answer_${i + 1}_name" class="form-control" name="question_${questionCount}_answer_${i + 1}_name">
+                            <input type="checkbox" id="question_${questionCount}_answer_${i + 1}_is_correct" class="form-check-input" name="question_${questionCount}_answer_${i + 1}_is_correct">
+                            <label class="form-check-label" for="question_${questionCount}_answer_${i + 1}_is_correct">Correct</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            newQuestionsContainer.appendChild(questionDiv);
+            questionCount++;
+        } else {
+            alert('Maximum number of questions reached.');
+        }
+    });
+
+    document.querySelectorAll('.delete-question').forEach(button => {
+        button.addEventListener('click', function () {
+            const questionId = this.dataset.questionId;
+            fetch(`/delete_question/${questionId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: questionId })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status === 'success') {
+                      const questionBlock = this.closest('.question-block');
+                      questionBlock.remove();
+                  } else {
+                      alert('Failed to delete question.');
+                  }
+              }).catch(error => {
+                  console.error('Error:', error);
+                  alert('Failed to delete question.');
+              });
+        });
+    });
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+

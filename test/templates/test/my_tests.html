@@ -1,0 +1,67 @@
+{% extends 'test/base.html' %}
+
+{% block title %}My tests{% endblock %}
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+    .card {
+        border-radius: 2vw; /* Увеличиваем радиус границ для более округлых углов карточек */
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+    }
+    .btn-take-test {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 0.5rem 1rem;
+        font-size: 1.25rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+    }
+    .btn-take-test:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>My Tests</h1>
+    <div class="row">
+        {% for test in tests %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ test.name }}</h5>
+                    <p class="card-text">Category: {{ test.category }}</p>
+                    <p class="card-text">
+                        Author:
+                        {% for user in users %}
+                            {% if user.id == test.author_id %}
+                                {{ user.username }}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><a href="{% url 'passing_the_test' test.id %}" class="btn btn-primary">Take Test</a></p>
+                    <p><a href="{% url 'edit_test' test.id %}" class="btn btn-primary">Edit Test</a></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

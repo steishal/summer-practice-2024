@@ -1,0 +1,57 @@
+{% extends 'test/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<h1>Search Results</h1>
+
+{% if tests %}
+    <div class="row">
+        {% for test in tests %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ test.name }}</h5>
+                        <p class="card-text">Category: {{ test.category }}</p>
+                        <p class="card-text">
+                            Author:
+                            {% for user in users %}
+                                {% if user.id == test.author_id %}
+                                    {{ user.username }}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <a href="{% url 'passing_the_test' test.id %}" class="btn btn-primary">Take Test</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Nothing was found</p>
+{% endif %}
+
+{% endblock %}
+
+
+
+

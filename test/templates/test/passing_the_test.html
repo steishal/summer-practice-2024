@@ -1,0 +1,64 @@
+{% extends 'test/base.html' %}
+{% block title %}Passing tests{% endblock %}
+
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+    .question-text {
+        font-size: 21px; /* Размер шрифта для вопросов */
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <h1>{{ test.name }}</h1>
+    <p id="countdown">Time left: {{ time_for_pass }}</p>
+    <form id="testForm" method="post" action="/test/{{ test.id }}/results/">
+        {% csrf_token %}
+        {% for question in questions %}
+            <h2 class="question-text">{{ question.name }}</h2>  <!-- Применяем стиль к тексту вопроса -->
+            {% for answer in question.answer_set.all %}
+                <div class="form-check">
+                    <input type="checkbox"
+                           name="answer_{{ question.id }}"
+                           class="form-check-input"
+                           id="answer{{ answer.id }}"
+                           value="{{ answer.id }}"
+                           {% if answer.id in user_answers %}checked{% endif %}>
+                    <label for="answer{{ answer.id }}" class="form-check-label">{{ answer.name }}</label>
+                </div>
+            {% endfor %}
+            <br>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Check</button>
+    </form>
+
+    <script>
+    var countdownElement = document.getElementById('countdown');
+    var timeLeft = {{ time_for_pass }} * 60; // Конвертируем минуты в секунды
+    var countdown = setInterval(function() {
+        timeLeft--;
+        var minutes = Math.floor(timeLeft / 60);
+        var seconds = timeLeft % 60;
+        countdownElement.textContent = "Time left: " + minutes + "m " + seconds + "s";
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            document.getElementById('testForm').submit(); // Отправляем форму при истечении времени
+        }
+    }, 1000);
+    </script>
+{% endblock %}

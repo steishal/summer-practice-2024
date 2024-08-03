@@ -1,0 +1,54 @@
+{% extends 'test/base.html' %}
+
+{% block title %}Registration{% endblock %}
+
+{% block add_styles %}
+<style>
+
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Высота окна браузера */
+        padding: 15px;
+    }
+    .login-form {
+        width: 100%;
+        max-width: 400px; /* Максимальная ширина формы */
+        padding: 15px;
+        background-color: #f9f9f9; /* Фон формы */
+        border-radius: 10px; /* Закругленные углы */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-form">
+        <form action="/account/register/" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="btn btn-primary w-100" value="Register">
+        </form>
+    </div>
+</div>
+{% endblock %}
+

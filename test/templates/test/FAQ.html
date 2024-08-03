@@ -1,0 +1,148 @@
+{% extends 'test/base.html' %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    #accordion .card {
+        margin-bottom: 10px;
+        border-radius: 2vw;
+        overflow: hidden;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+    #accordion .card-header {
+        cursor: pointer;
+        font-size: 1.6rem;
+    }
+    .card-body {
+        text-align: left;
+        font-size: 1.1rem;
+    }
+    #accordion .btn-link {
+        font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+        #accordion .card {
+            max-width: 90%;
+        }
+        #accordion .card-header {
+            font-size: 1.2rem;
+        }
+        .card-body {
+            font-size: 1rem;
+        }
+        #accordion .btn-link {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h1>Frequently Asked Questions</h1>
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        How to create a new test?
+                    </button>
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    Log in to your account and select the option "Create a test". Come up with a test title, choose its category, add questions, answer options, and specify the correct answers. Set the test completion time and save it.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        How to take a test?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    Select an available test from the list on the main page and start taking it. Answer the questions by choosing one or multiple answers from the options provided. Test results will be displayed after its completion.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        How to manage tests?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div class="card-body">
+                    You can edit the tests you have created on the "My tests" page, as well as view statistics on completed tests on the "Passed tests" page.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingFour">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        How to search for tests?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                <div class="card-body">
+                    You can find a test on the main page among the list of tests, as well as use the search bar in the navigation panel. Search is done based on a keyword in the test title. Search can also be done by test categories by clicking on one of the categories in the list. Test categories can be viewed in the dropdown list on the navigation panel, called "Categories".
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingFive">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        What to do if problems or questions arise?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                <div class="card-body">
+                    If you have problems or questions, contact our manager on Telegram (@staishal) or send us an email (alba.shaykhullina@mail.ru). We are always ready to help you!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

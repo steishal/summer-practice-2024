@@ -1,0 +1,41 @@
+{% extends 'test/base.html' %}
+
+{% block title %}Exit{% endblock %}
+
+{% block add_styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+
+    .container {
+        background-color: white;
+        border-radius: 2vw;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.1);
+        padding: 3vw;
+        max-width: 90%;
+        width: 90%;
+        margin: 0 auto;
+        text-align: center; /* Выравнивание текста по центру */
+    }
+
+    .rounded-box {
+        border-radius: 2vw;
+        padding: 1.5vw; /* задаем отступ внутри прямоугольного поля для кнопки */
+        margin: 2vw auto; /* при необходимости задаем отступ от других элементов */
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="rounded-box">
+        <a class="btn btn-primary btn-lg" href="{% url 'login' %}">Login</a> <!-- используем класс btn-lg для увеличения размера кнопки -->
+    </div>
+</div>
+{% endblock %}
